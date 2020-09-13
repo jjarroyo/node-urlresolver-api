@@ -16,7 +16,7 @@ app.use(bodyParser.json({ limit: '5mb' }));
 
 let routes = require("./routes");
 // Setup server port
-const port = 3000;
+const port = 80;
 // Send message for default URL
 app.get('/', (req, res) => res.send('Not found'));
 // Use Api routes in the App
