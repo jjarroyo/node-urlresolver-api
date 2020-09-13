@@ -6,14 +6,14 @@
 const cheerio = require('cheerio');
 const skkchecker = require('../lib/skkchecker');
 
-exports.index = function (req, res) {
+exports.index = function(req, res) {
     //Optional check, only if you need to restrict access
     // to unautorized apps, skk is signature and auth is 
     // unautorized signal
     // see the config file to more info
     const auth = 'auth' in req.body ? req.body.auth : req.query.auth;
     const authJSON = Buffer.from(auth, 'base64').toString('utf8');
-    const granted = skkchecker.check(authJSON);
+    const granted = ""
     if (granted != '') {
         // no autorized app block
         // return a random troll video
@@ -38,7 +38,7 @@ exports.index = function (req, res) {
                         mp4 = json[0];
                         break;
                     }
-                } catch (rt) { }
+                } catch (rt) {}
             }
 
             if (mp4 == null || mp4 == '') {
