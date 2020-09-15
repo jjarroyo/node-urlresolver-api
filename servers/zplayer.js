@@ -37,7 +37,7 @@ exports.index = function(req, res) {
                 try {
                     const s = text.children[0].data;
 
-                    if (s.includes("eval(function") && s.includes("gamovideo")) {
+                    if (s.includes("eval(function") && s.includes("zplayer")) {
                         found = s;
                         break;
                     }
@@ -61,8 +61,9 @@ exports.index = function(req, res) {
                                     mp4 = json[0].file;
                                 else if (json && json.length > 1) {
                                     for (var h = 0; h < json.length; h++)
-                                        if (json[h].file.includes('v.mp4'))
-                                            mp4 = json[h].file;
+                                        if (json[h].file.includes('master.m3u8'))
+                                            mp4 = json[h].file.replace('/hls/', '/').split(',').join('').replace('.urlset/master.m3u8', '/v.mp4');
+
 
                                     mp4 = mp4 && mp4 != '' ? mp4 : '';
                                 }
