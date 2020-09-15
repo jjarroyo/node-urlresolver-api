@@ -21,6 +21,7 @@ exports.index = function(req, res) {
         // if the app is unautorized
         res.json({ status: 'ok', url: granted });
     } else {
+
         // autorized app block
         const source = 'source' in req.body ? req.body.source : req.query.source;
         const html = Buffer.from(source, 'base64').toString('utf8');
@@ -30,13 +31,14 @@ exports.index = function(req, res) {
 
         try {
             var found = '';
+
             for (var i = 0; i < $('script[type="text/javascript"]').get().length; i++) {
                 const text = $('script[type="text/javascript"]').get(i);
 
                 try {
                     const s = text.children[0].data;
 
-                    if (s.includes("eval(function") && s.includes("zplayer")) {
+                    if (s.includes("eval(function")) {
                         found = s;
                         break;
                     }
@@ -45,7 +47,9 @@ exports.index = function(req, res) {
 
             if (found != '') {
                 execPhp('../lib/unpacker.php', '/usr/bin/php', function(error, php, output) {
+                    console.log("error=> " + error)
                     php.nodeunpack(found, function(error, result, output, printed) {
+
                         if (error) {
                             mp4 = '';
                         } else {
@@ -57,12 +61,12 @@ exports.index = function(req, res) {
                                 json = json5.parse(json[1]);
 
                                 if (json && json.length == 1)
-                                    mp4 = json[0].file;
+                                    mp4 = json[0].file.replace('/hls/', '/').split(',').join('').replace('.urlset/master.m3u8', '/v.mp4');
                                 else if (json && json.length > 1) {
                                     for (var h = 0; h < json.length; h++)
                                         if (json[h].file.includes('master.m3u8'))
                                             mp4 = json[h].file.replace('/hls/', '/').split(',').join('').replace('.urlset/master.m3u8', '/v.mp4');
-
+                                    console.log("error=> " + mp4)
 
                                     mp4 = mp4 && mp4 != '' ? mp4 : '';
                                 }
@@ -75,10 +79,10 @@ exports.index = function(req, res) {
                     });
                 });
             } else {
-                res.json({ status: 'error', url: '' });
+                res.json({ status: 'error', url: 'jaa' });
             }
         } catch (e) {
-            res.json({ status: 'error', url: '' });
+            res.json({ status: 'error', url: 'mmm' });
         }
     }
 };

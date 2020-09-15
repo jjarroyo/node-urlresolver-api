@@ -33,7 +33,7 @@ exports.index = function(req, res) {
             var found = '';
             for (var i = 0; i < $('script[type="text/javascript"]').get().length; i++) {
                 const text = $('script[type="text/javascript"]').get(i);
-
+                console.log("entra")
                 try {
                     const s = text.children[0].data;
 
